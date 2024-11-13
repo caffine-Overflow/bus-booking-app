@@ -48,6 +48,18 @@ const AddUserForm = () => {
     setEnteredPhone("");
     setEnteredBusNumber("bus1");
   };
+  const deleteUserHandler = (index) => {
+    setUserList((prevUserList) => prevUserList.filter((_, i) => i !== index));
+  };
+
+  const editUserHandler = (index) => {
+    const userToEdit = userList[index];
+    setEnteredName(userToEdit.name);
+    setEnteredEmail(userToEdit.email);
+    setEnteredPhone(userToEdit.phone);
+    setEnteredBusNumber(userToEdit.busNumber);
+    deleteUserHandler(index); // Remove the user from the list after editing
+  };
 
   return (
     <React.Fragment>
@@ -97,8 +109,12 @@ const AddUserForm = () => {
         <button type="submit">Book</button>
       </form>
 
-      {/* Pass the userList state to the BookingList component */}
-      <BookingList users={userList} />
+      {/* Pass the userList state and handlers to the BookingList component */}
+      <BookingList
+        users={userList}
+        onDeleteUser={deleteUserHandler}
+        onEditUser={editUserHandler}
+      />
     </React.Fragment>
   );
 };
