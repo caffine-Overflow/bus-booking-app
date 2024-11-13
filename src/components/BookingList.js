@@ -3,7 +3,7 @@ import React from "react";
 const BookingList = ({ users, onDeleteUser, onEditUser }) => {
   return (
     <div>
-      <h2>User Bookings</h2>
+      <h2>Bookings</h2>
       <ul>
         {users.map((user, index) => (
           <li key={index}>

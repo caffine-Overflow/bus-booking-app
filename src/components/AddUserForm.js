@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import BookingList from "./BookingList";
 
-const AddUserForm = () => {
+const AddUserForm = ({ selectedBus, onAddUser }) => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPhone, setEnteredPhone] = useState("");
   const [enteredBusNumber, setEnteredBusNumber] = useState("bus1");
-  const [userList, setUserList] = useState([]);
 
   const nameChangeHandler = (event) => {
     setEnteredName(event.target.value);
@@ -26,7 +24,6 @@ const AddUserForm = () => {
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    // Create the new user object
     const newUser = {
       name: enteredName,
       email: enteredEmail,
@@ -34,13 +31,7 @@ const AddUserForm = () => {
       busNumber: enteredBusNumber,
     };
 
-    // Add the new user to the list
-    setUserList((prevUserList) => [...prevUserList, newUser]);
-
-    // Log the user data
-    console.log(
-      `${enteredName}-${enteredEmail}-${enteredPhone}-${enteredBusNumber}`
-    );
+    onAddUser(newUser); // Pass new user to the parent
 
     // Reset the form
     setEnteredName("");
@@ -48,74 +39,56 @@ const AddUserForm = () => {
     setEnteredPhone("");
     setEnteredBusNumber("bus1");
   };
-  const deleteUserHandler = (index) => {
-    setUserList((prevUserList) => prevUserList.filter((_, i) => i !== index));
-  };
-
-  const editUserHandler = (index) => {
-    const userToEdit = userList[index];
-    setEnteredName(userToEdit.name);
-    setEnteredEmail(userToEdit.email);
-    setEnteredPhone(userToEdit.phone);
-    setEnteredBusNumber(userToEdit.busNumber);
-    deleteUserHandler(index); // Remove the user from the list after editing
-  };
 
   return (
-    <React.Fragment>
-      <form
-        onSubmit={addUserHandler}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "200px",
-        }}
-      >
-        <label htmlFor="username">Name:</label>
-        <input
-          type="text"
-          id="username"
-          value={enteredName}
-          onChange={nameChangeHandler}
-        />
-
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={enteredEmail}
-          onChange={emailChangeHandler}
-        />
-
-        <label htmlFor="phone">Phone:</label>
-        <input
-          type="number"
-          id="phone"
-          value={enteredPhone}
-          onChange={phoneChangeHandler}
-        />
-
-        <label htmlFor="busnumber">Car Number:</label>
-        <select
-          id="busnumber"
-          value={enteredBusNumber}
-          onChange={busNumberChangeHandler}
-        >
-          <option value="bus1">Bus 1</option>
-          <option value="bus2">Bus 2</option>
-          <option value="bus3">Bus 3</option>
-        </select>
-
-        <button type="submit">Book</button>
-      </form>
-
-      {/* Pass the userList state and handlers to the BookingList component */}
-      <BookingList
-        users={userList}
-        onDeleteUser={deleteUserHandler}
-        onEditUser={editUserHandler}
+    <form
+      onSubmit={addUserHandler}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "200px",
+      }}
+    >
+      <label htmlFor="username">Name:</label>
+      <input
+        type="text"
+        id="username"
+        value={enteredName}
+        onChange={nameChangeHandler}
       />
-    </React.Fragment>
+
+      <label htmlFor="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        value={enteredEmail}
+        onChange={emailChangeHandler}
+      />
+
+      <label htmlFor="phone">Phone:</label>
+      <input
+        type="number"
+        id="phone"
+        value={enteredPhone}
+        onChange={phoneChangeHandler}
+      />
+
+      <label htmlFor="busnumber">Car Number:</label>
+      <select
+        id="busnumber"
+        value={enteredBusNumber}
+        onChange={busNumberChangeHandler}
+      >
+        <option value="bus1">Bus 1</option>
+        <option value="bus2">Bus 2</option>
+        <option value="bus3">Bus 3</option>
+      </select>
+
+      {/* Displaying selected bus as an additional info */}
+      {selectedBus !== "all" && <p>Filtering for Bus: {selectedBus}</p>}
+
+      <button type="submit">Book</button>
+    </form>
   );
 };
 
